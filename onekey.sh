@@ -66,3 +66,4 @@ else
     nohup /opt/damominer_$VERSION/damominer --address $1 --proxy asiahk.damominer.hk:9090 >> /tmp/aleo.log 2>&1 &
     echo "Your address is $1"
 fi
+tail /tmp/aleo.log
