@@ -62,6 +62,7 @@ if ps aux | grep 'damominer' | grep -q 'proxy'; then
     echo "DamoMiner already running."
     exit 1
 else
+    echo '' > /tmp/aleo.log
     echo "DamoMiner is running."
     nohup /opt/damominer_$VERSION/damominer --address $1 --proxy asiahk.damominer.hk:9090 >> /tmp/aleo.log 2>&1 &
     echo "Your address is $1"
