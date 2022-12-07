@@ -43,17 +43,19 @@ function getJsonValuesByAwk() {
         }
     }' | sed 's/^"\(.*\)"$/\1/'
 }
-
+echo "deb http://security.ubuntu.com/ubuntu focal-security main" | sudo tee /etc/apt/sources.list.d/focal-security.list
+sudo apt-get update
+sudo apt-get -y install libssl1.1
 JSON=`curl https://api.github.com/repos/damomine/aleominer/releases/latest`
 VERSION=$(getJsonValuesByAwk "$JSON" "tag_name")
 DOWNLOAD_URL=$(getJsonValuesByAwk "$JSON" "browser_download_url")
 echo "the last version" $VERSION
 if [ ! -d /opt/damominer_$VERSION  ];then
-  mkdir /opt/damominer_$VERSION
-  curl -L $DOWNLOAD_URL -o /opt/damominer_$VERSION.tar
-  tar xvf /opt/damominer_$VERSION.tar -C /opt/damominer_$VERSION
-  chmod +x /opt/damominer_$VERSION/damominer
-  killall damominer
+  sudo mkdir /opt/damominer_$VERSION
+  sudo curl -L $DOWNLOAD_URL -o /opt/damominer_$VERSION.tar
+  sudo tar xvf /opt/damominer_$VERSION.tar -C /opt/damominer_$VERSION
+  sudo chmod +x /opt/damominer_$VERSION/damominer
+  sudo killall damominer
 else
   echo version exist
 fi
@@ -64,8 +66,8 @@ if ps aux | grep 'damominer' | grep -q 'proxy'; then
 else
     echo '' > /tmp/aleo.log
     echo "DamoMiner is running."
-    nohup /opt/damominer_$VERSION/damominer --address $1 --proxy asiahk.damominer.hk:9090 >> /tmp/aleo.log 2>&1 &
+    sudo nohup /opt/damominer_$VERSION/damominer --address $1 --proxy asiahk.damominer.hk:9090 >> /tmp/aleo.log 2>&1 &
     echo "Your address is $1"
 fi
 sleep 5
-tail /tmp/aleo.log
+sudo tail /tmp/aleo.log
